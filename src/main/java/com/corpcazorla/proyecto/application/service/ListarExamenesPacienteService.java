@@ -17,7 +17,7 @@ public class ListarExamenesPacienteService {
     public List<Paciente> ejecutar(PacienteRequest req) {
         return repository.buscarConFiltros(
             req.sexo,
-            req.tipoExamen,
+            req.nombrePaciente,
             req.fechaInicio,
             req.fechaFin,
             req.pagina,

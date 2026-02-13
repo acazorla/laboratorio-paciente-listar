@@ -1,16 +1,15 @@
 package com.corpcazorla.proyecto.domain.ports.out;
 
 import com.corpcazorla.proyecto.domain.model.Paciente;
-import java.time.LocalDate;
 import java.util.List;
 
 
 public interface PacienteRepositoryPort {
     List<Paciente> buscarConFiltros(
             String sexo,
-            String tipoExamen,
-            LocalDate fechaInicio,
-            LocalDate fechaFin,
+            String nombrePaciente,
+            String fechaInicio,
+            String fechaFin,
             int pagina,
             int size
         );

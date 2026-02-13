@@ -5,7 +5,6 @@ import com.corpcazorla.proyecto.domain.model.Paciente;
 import com.corpcazorla.proyecto.infrastructure.adapter.out.persistence.entity.PacienteEntity;
 import com.corpcazorla.proyecto.infrastructure.adapter.out.persistence.entity.ExamenEntity;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ public class PacienteMapper {
                 // Usamos el constructor que ya tienes definido (según imagen d702db)
                 Examen examen = new Examen(
                     eEntity.getNombre(), 
-                    eEntity.getFecha(), 
+                    eEntity.getFecha().toString(), 
                     eEntity.getRutaArchivo()
                 );
                 listaExamenes.add(examen);
@@ -86,7 +85,7 @@ public class PacienteMapper {
         List<Paciente> lista = new ArrayList<>();
         // Si vas a agregar exámenes
         List<Examen> examenes = new ArrayList<>();
-        examenes.add(new Examen("Hemograma", LocalDate.now(), "\\\\172.20.14.18\\\\servicios\\\\MEDICINA OCUPACIONAL\\\\GENERAL_1432838.pdf"));
+        examenes.add(new Examen("Hemograma", LocalDate.now().toString(), "\\172.20.14.18\\servicios\\MEDICINA OCUPACIONAL\\GENERAL_1432838.pdf"));
         lista.add(new Paciente(
                 "PAC-001",
                 "Ana Martinez",

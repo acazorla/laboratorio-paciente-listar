@@ -8,8 +8,6 @@ import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Alternative;
 
-import java.time.LocalDate;
-//import java.util.ArrayList;
 import java.util.List;
 
 @Alternative
@@ -20,9 +18,9 @@ public class PacienteMockAdapter implements PacienteRepositoryPort {
     @Override
     public List<Paciente> buscarConFiltros(
             String sexo,
-            String tipoExamen,
-            LocalDate fechaInicio,
-            LocalDate fechaFin,
+            String nombrePaciente,
+            String fechaInicio,
+            String fechaFin,
             int pagina,
             int size) {
 
