@@ -4,6 +4,7 @@ import com.corpcazorla.proyecto.domain.model.Paciente;
 import com.corpcazorla.proyecto.domain.ports.out.PacienteRepositoryPort;
 import com.corpcazorla.proyecto.infrastructure.adapter.out.persistence.mapper.PacienteMapper;
 
+import io.quarkus.arc.lookup.LookupIfProperty;
 import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Alternative;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Alternative
 @Priority(1)
+@LookupIfProperty(name = "adapter.mode", stringValue = "mock")
 @ApplicationScoped
 public class PacienteMockAdapter implements PacienteRepositoryPort {
 

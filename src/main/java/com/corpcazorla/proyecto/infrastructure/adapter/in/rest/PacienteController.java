@@ -1,11 +1,9 @@
 package com.corpcazorla.proyecto.infrastructure.adapter.in.rest;
 
-import java.util.List;
-
 import com.corpcazorla.proyecto.application.service.ListarExamenesPacienteService;
 import com.corpcazorla.proyecto.infrastructure.adapter.in.dto.PacienteRequest;
-import com.corpcazorla.proyecto.domain.model.Paciente;
 
+//import jakarta.enterprise.inject.build.compatible.spi.Validation;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -32,8 +30,8 @@ public class PacienteController {
     @Path("/listar")
     @Consumes(MediaType.APPLICATION_JSON) 
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listarPaciernteExamen(PacienteRequest request) {
-    	System.out.println("El JSON que llegó es: " + request.toString());
+    public Response listarPacienteExamen(PacienteRequest request) {
+    	//System.out.println("El JSON que llegó es: " + request.toString());
     	return Response.ok(service.ejecutar(request)).build();
     }
 

@@ -16,12 +16,12 @@ public class ListarExamenesPacienteService {
 
     public List<Paciente> ejecutar(PacienteRequest req) {
         return repository.buscarConFiltros(
-            req.sexo,
-            req.nombrePaciente,
-            req.fechaInicio,
-            req.fechaFin,
-            req.pagina,
-            req.size
+            req.getSexo(),
+            req.getNombrePaciente(),
+            req.getFechaInicio(),
+            req.getFechaFin(),
+            req.getPagina(),
+            req.getSize()
         );
     }
 

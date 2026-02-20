@@ -21,7 +21,7 @@ public class PacienteMapper {
     public static Paciente fromEntity(PacienteEntity entity) {
         Paciente paciente = new Paciente();
         paciente.setId(entity.getId());
-        paciente.setNombre(entity.getNombre());
+        paciente.setNombrePaciente(entity.getNombre());
         paciente.setSexo(entity.getSexo());
 
         if (entity.getExamenes() != null && !entity.getExamenes().isEmpty()) {
@@ -54,7 +54,7 @@ public class PacienteMapper {
         Paciente p = new Paciente();
 
         p.setId((String) row[0]);
-        p.setNombre((String) row[1]);
+        p.setNombrePaciente((String) row[1]);
         p.setSexo((String) row[2]);
         
        // p.setExamenes((String) row[3]);
@@ -86,6 +86,9 @@ public class PacienteMapper {
         // Si vas a agregar exámenes
         List<Examen> examenes = new ArrayList<>();
         examenes.add(new Examen("Hemograma", LocalDate.now().toString(), "\\172.20.14.18\\servicios\\MEDICINA OCUPACIONAL\\GENERAL_1432838.pdf"));
+        examenes.add(new Examen("Orina completo", LocalDate.now().toString(), "\\172.20.14.18\\servicios\\MEDICINA OCUPACIONAL\\GENERAL_1432838.pdf"));
+        examenes.add(new Examen("Radiografía tórax", LocalDate.now().toString(), "\\172.20.14.18\\servicios\\MEDICINA OCUPACIONAL\\GENERAL_1432838.pdf"));
+
         lista.add(new Paciente(
                 "PAC-001",
                 "Ana Martinez",
