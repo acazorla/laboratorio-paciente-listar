@@ -9,8 +9,6 @@ public class PacienteRequest {
 	private int pagina = 0;
 	private int size = 10;
 
-	public PacienteRequest() {
-	}
 	public String getNombrePaciente() {
 		return nombrePaciente;
 	}

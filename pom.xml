@@ -44,6 +44,10 @@
             <artifactId>quarkus-jdbc-mssql</artifactId>
         </dependency>
         <dependency>
+    		<groupId>io.quarkus</groupId>
+    		<artifactId>quarkus-hibernate-orm</artifactId>
+		</dependency>
+        <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
         </dependency>

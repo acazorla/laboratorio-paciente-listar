@@ -5,17 +5,17 @@ import com.corpcazorla.proyecto.domain.ports.out.PacienteRepositoryPort;
 import com.corpcazorla.proyecto.infrastructure.adapter.in.dto.PacienteRequest;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import java.util.List;
-
 
 @ApplicationScoped
 public class ListarExamenesPacienteService {
-    @Inject
-    PacienteRepositoryPort repository;
+	private final PacienteRepositoryPort pacienteRepositoryPort;
 
+    public ListarExamenesPacienteService(PacienteRepositoryPort repository) {
+        this.pacienteRepositoryPort = repository;
+    }
     public List<Paciente> ejecutar(PacienteRequest req) {
-        return repository.buscarConFiltros(
+        return pacienteRepositoryPort.buscarConFiltros(
             req.getSexo(),
             req.getNombrePaciente(),
             req.getFechaInicio(),

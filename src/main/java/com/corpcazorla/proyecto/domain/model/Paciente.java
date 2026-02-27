@@ -12,10 +12,12 @@ public class Paciente {
     
     public Paciente() {
     }
-    public Paciente(String id, String nombrePaciente,String sexo, List<Examen> examenes) {
+    public Paciente(String id, String nombrePaciente,String sexo,String fechaAtencion,String fechaNacimiento, List<Examen> examenes) {
         this.id = id;
         this.nombrePaciente = nombrePaciente;
         this.sexo = sexo;
+        this.fechaAtencion = fechaAtencion;
+        this.fechaNacimiento = fechaNacimiento;
         this.examenes = examenes;
     }
 
@@ -33,7 +35,4 @@ public class Paciente {
     public void setSexo(String sexo) { this.sexo = sexo; }
     public void setExamenes(List<Examen> examenes) { this.examenes = examenes; }
 	
-
-	
-    
 }
