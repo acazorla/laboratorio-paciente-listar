@@ -20,10 +20,6 @@ public class ApiResponse<T> {
         this.data = data;
         this.pagination = pagination;
     }
-	/*
-	 * public ApiResponse(T data, Pagination pagination) { this.success = true;
-	 * this.data = data; this.pagination = pagination; this.meta = new Meta(); }
-	 */
 
 	public boolean isSuccess() {
 		return success;

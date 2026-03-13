@@ -1,7 +1,9 @@
 package com.corpcazorla.proyecto.infrastructure.adapter.out.persistence;
 
+import com.corpcazorla.proyecto.domain.model.DataPage;
 import com.corpcazorla.proyecto.domain.model.Paciente;
 import com.corpcazorla.proyecto.domain.ports.out.PacienteRepositoryPort;
+import com.corpcazorla.proyecto.infrastructure.adapter.in.dto.PacienteRequest;
 import com.corpcazorla.proyecto.infrastructure.adapter.out.persistence.mapper.PacienteMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Default;
@@ -23,37 +25,33 @@ public class PacienteJpaAdapter implements PacienteRepositoryPort {
     }
 
     @Override
-    public List<Paciente> buscarConFiltros(String sexo, String tipoExamen, String fechaInicio, String fechaFin, int pagina, int size) {
+    public DataPage<Paciente> buscarPacienteConFiltros(PacienteRequest request) {
     	try {
-    	// Llamada nativa al procedimiento almacenado de SQL Server
-        Query query = entityManager.createNativeQuery("EXEC OCUPACIONAL.usp_listar_pacientes_examen :sexo, :tipo, :inicio, :fin");
-        
-        // Seteo de parámetros
-        query.setParameter("sexo", sexo);
-        query.setParameter("tipo", tipoExamen);
-        query.setParameter("inicio", fechaInicio);
-        query.setParameter("fin", fechaFin);
+    		// 1. Definición de la consulta nativa
+            Query query = entityManager.createNativeQuery("EXEC OCUPACIONAL.usp_ListarPacientesConExamenes :sexo, :tipo, :inicio, :fin, :pagina, :size");
 
-        // Obtenemos la lista de objetos planos (Object[])
-        //@SuppressWarnings("unchecked")
-        //List<Object[]> rows = query.getResultList();
-        
-        // Usamos tu mapper para transformar de filas SQL a objetos de Dominio
-       // return mapper.fromRows(rows);
-        //return mapper.fromRows(query.getResultList());
-     // Cast seguro para evitar el warning de "Type safety"
-        @SuppressWarnings("unchecked")
-        List<Object[]> rows = (List<Object[]>) query.getResultList();
-     // Es buena práctica validar nulidad antes del mapeo
-        if (rows == null) {
-            return java.util.Collections.emptyList();
-        }
-        return mapper.fromRows(rows);
+            // 2. Seteo de parámetros de filtro
+            query.setParameter("sexo", request.getSexo());
+            query.setParameter("tipo", request.getNombrePaciente());
+            query.setParameter("inicio", request.getFechaInicio());
+            query.setParameter("fin", request.getFechaFin());
+            query.setParameter("pagina", request.getPagina());
+            query.setParameter("size", request.getSize());
+
+            // 3. Obtención y mapeo de resultados
+            @SuppressWarnings("unchecked")
+            List<Object[]> rows = query.getResultList();
+            long totalRegistros = 0;
+            if (rows == null || rows.isEmpty()) {
+            	return new DataPage<>(java.util.Collections.emptyList(), totalRegistros);
+            }else {
+            	totalRegistros=((Number) rows.get(0)[rows.get(0).length - 1]).longValue();
+            }
+            
+            return new DataPage<>(mapper.fromRows(rows), totalRegistros);
     } catch (Exception e) {
-        // Logueamos el error real para el desarrollador
-        //Log.error("Error al ejecutar SP: " + e.getMessage());
-        // Lanzamos una excepción que el Mapper capturará para el usuario
-        throw new BusinessException("El servicio de consulta no está disponible actualmente.", 500);
+        // Pasamos 'e' como tercer argumento para mantener la causa raíz
+        throw new BusinessException("El servicio de consulta no está disponible actualmente.", e, 500);
     }
     }
 }

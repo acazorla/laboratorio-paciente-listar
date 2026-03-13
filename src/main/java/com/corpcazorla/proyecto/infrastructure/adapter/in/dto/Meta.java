@@ -1,15 +1,18 @@
 package com.corpcazorla.proyecto.infrastructure.adapter.in.dto;
-//import java.time.Instant;
+
 public class Meta {
     private String timestamp;
     private String version;
     private String traceId;
-    
-	/*
-	 * public Meta() { this.timestamp = Instant.now().toString(); this.version =
-	 * "v1"; this.traceId = java.util.UUID.randomUUID().toString(); }
-	 */
+ // Constructor por defecto para que Jackson no falle
+    public Meta() {}
 
+    // Constructor de conveniencia
+    public Meta(String version) {
+        this.timestamp = java.time.OffsetDateTime.now().toString();
+        this.version = version;
+        this.traceId = java.util.UUID.randomUUID().toString();
+    }
 	public String getTimestamp() {
 		return timestamp;
 	}

@@ -1,11 +1,11 @@
 package com.corpcazorla.proyecto.application.service;
 
+import com.corpcazorla.proyecto.domain.model.DataPage;
 import com.corpcazorla.proyecto.domain.model.Paciente;
 import com.corpcazorla.proyecto.domain.ports.out.PacienteRepositoryPort;
 import com.corpcazorla.proyecto.infrastructure.adapter.in.dto.PacienteRequest;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import java.util.List;
 
 @ApplicationScoped
 public class ListarExamenesPacienteService {
@@ -14,15 +14,8 @@ public class ListarExamenesPacienteService {
     public ListarExamenesPacienteService(PacienteRepositoryPort repository) {
         this.pacienteRepositoryPort = repository;
     }
-    public List<Paciente> ejecutar(PacienteRequest req) {
-        return pacienteRepositoryPort.buscarConFiltros(
-            req.getSexo(),
-            req.getNombrePaciente(),
-            req.getFechaInicio(),
-            req.getFechaFin(),
-            req.getPagina(),
-            req.getSize()
-        );
+    public DataPage<Paciente> listarPaciente(PacienteRequest request) {
+        return pacienteRepositoryPort.buscarPacienteConFiltros(request);
     }
 
 }

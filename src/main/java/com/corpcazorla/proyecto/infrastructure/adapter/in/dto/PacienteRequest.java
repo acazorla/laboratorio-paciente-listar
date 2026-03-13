@@ -1,12 +1,24 @@
 package com.corpcazorla.proyecto.infrastructure.adapter.in.dto;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+
 public class PacienteRequest {
 
 	private String nombrePaciente;
+	@Schema(description = "Sexo del paciente: M o F", enumeration = {"M", "F"})
 	private String sexo;
+	@Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Formato de fechaInicio debe ser YYYY-MM-DD")
 	private String fechaInicio;
+	@Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Formato de fechaFin debe ser YYYY-MM-DD")
 	private String fechaFin;
-	private int pagina = 0;
+	@Min(value = 1, message = "La página debe ser mayor a 0")
+	private int pagina = 1;
+	@Min(value = 1)
+    @Max(value = 100, message = "El tamaño máximo por página es 100")
 	private int size = 10;
 
 	public String getNombrePaciente() {

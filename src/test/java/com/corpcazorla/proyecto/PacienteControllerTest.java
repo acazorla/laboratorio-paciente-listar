@@ -32,6 +32,6 @@ class PacienteControllerTest {
              .body("success", is(true))
              .body("data", notNullValue())
              .body("data[0].nombrePaciente", notNullValue()) // Valida que el primer paciente tenga nombre
-             .body("meta.version", is("v1"));
+             .body("meta.version", containsString("SNAPSHOT"));
     }
 }

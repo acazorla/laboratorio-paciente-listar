@@ -10,9 +10,7 @@ import java.util.ArrayList;
 
 import com.corpcazorla.proyecto.infrastructure.adapter.in.dto.ApiResponse;
 import com.corpcazorla.proyecto.infrastructure.adapter.in.dto.Meta;
-
-//import java.util.Collections;
-//import org.hibernate.exception.SQLGrammarException;
+import com.corpcazorla.proyecto.infrastructure.adapter.out.persistence.BusinessException;
 
 @Provider
 public class GlobalExceptionMapper implements ExceptionMapper<Throwable> {
@@ -20,17 +18,25 @@ public class GlobalExceptionMapper implements ExceptionMapper<Throwable> {
 	private static final Logger LOG = Logger.getLogger(GlobalExceptionMapper.class);
     @Override
     public Response toResponse(Throwable exception) {
-    	// 1. Generar ID único de trazabilidad
-        String traceId = UUID.randomUUID().toString();
+    	String traceId = UUID.randomUUID().toString();
         
-        // 2. LOGUEO PROFESIONAL: 
-        // Registramos el error REAL en la consola del servidor con su TraceID.
-        LOG.errorf("Error Crítico [TraceID: %s] - Detalle Técnico: %s", traceId, exception.getMessage(), exception);
+        // Valores por defecto para errores no controlados (500)
+        Response.Status status = Response.Status.INTERNAL_SERVER_ERROR;
+        String userMessage = "Error en la comunicación con los servicios de datos.";
 
-        // 3. Construcción de respuesta estandarizada
+        // Identificamos si es un error controlado por nosotros
+        if (exception instanceof BusinessException be) {
+            status = Response.Status.fromStatusCode(be.getCode());
+            userMessage = be.getMessage();
+            LOG.warnf("Excepción de Negocio [TraceID: %s]: %s", traceId, userMessage);
+        } else {
+            // Si es un error técnico real (NullPointer, SQL Error, etc.)
+            LOG.errorf("Error Crítico [TraceID: %s] - Detalle: %s", traceId, exception.getMessage(), exception);
+        }
+
         ApiResponse<Object> errorResponse = new ApiResponse<>();
         errorResponse.setSuccess(false);
-        errorResponse.setMessage("Error en la comunicación con los servicios de datos.");
+        errorResponse.setMessage(userMessage);
         errorResponse.setData(new ArrayList<>());
         
         Meta meta = new Meta();
@@ -39,6 +45,6 @@ public class GlobalExceptionMapper implements ExceptionMapper<Throwable> {
         meta.setVersion("v1");
         errorResponse.setMeta(meta);
 
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorResponse).build();
+        return Response.status(status).entity(errorResponse).build();
     }
 }

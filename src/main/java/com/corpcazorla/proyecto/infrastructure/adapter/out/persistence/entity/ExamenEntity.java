@@ -16,6 +16,5 @@ public class ExamenEntity {
 	public String getRutaArchivo() {
 		return rutaArchivo;
 	}
-    
-    
+        
 }

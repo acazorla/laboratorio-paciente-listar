@@ -14,19 +14,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class PacienteMapper {
 
-//    private PacienteMapper() {
-        // Utility class
-//    }
  // NUEVO MÉTODO: Convierte Dominio -> DTO de Respuesta
     public List<PacienteResponse> toResponseList(List<Paciente> pacientes) {
         return pacientes.stream()
                 .map(this::toResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
     public PacienteResponse toResponse(Paciente paciente) {
         PacienteResponse dto = new PacienteResponse();
@@ -39,7 +35,7 @@ public class PacienteMapper {
         if (paciente.getExamenes() != null) {
             List<ExamenResponse> examenesDto = paciente.getExamenes().stream()
                     .map(this::toExamenResponse)
-                    .collect(Collectors.toList());
+                    .toList();
             dto.setExamenes(examenesDto);
         }
         return dto;
@@ -65,12 +61,11 @@ public class PacienteMapper {
             List<Examen> listaExamenes = new ArrayList<>();
             
             for (ExamenEntity eEntity : entity.getExamenes()) {
-                // Usamos el constructor que ya tienes definido (según imagen d702db)
-                Examen examen = new Examen(
-                    eEntity.getNombre(), 
-                    eEntity.getFecha().toString(), 
-                    eEntity.getRutaArchivo()
-                );
+
+                Examen examen = new Examen();
+                examen.setNombre(eEntity.getNombre());
+                examen.setFecha(eEntity.getFecha().toString());
+                examen.setArchivo(eEntity.getRutaArchivo());
                 listaExamenes.add(examen);
             }
             paciente.setExamenes(listaExamenes);
@@ -81,7 +76,7 @@ public class PacienteMapper {
     public static List<Paciente> fromEntityList(List<PacienteEntity> entities) {
         return entities.stream()
                 .map(PacienteMapper::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // ===============================
@@ -93,27 +88,11 @@ public class PacienteMapper {
         p.setId((String) row[0]);
         p.setNombrePaciente((String) row[1]);
         p.setSexo((String) row[2]);
-        
-       // p.setExamenes((String) row[3]);
-
-        //if (row[4] instanceof Timestamp ts) {
-       //     p.setFechaExamen(ts.toLocalDateTime().toLocalDate());
-       // } else if (row[4] instanceof LocalDate ld) {
-        //    p.setFechaExamen(ld);
-        //}
-
-        //p.setRutaArchivo((String) row[5]);
-
+ 
         return p;
     }
 
-    //public static List<Paciente> fromRows(List<Object[]> rows) {
-    //    List<Paciente> pacientes = new ArrayList<>();
-    //    for (Object[] row : rows) {
-    //        pacientes.add(fromRow(row));
-    //    }
-    //    return pacientes;
-    //}
+
     public List<Paciente> fromRows(List<Object[]> rows) {
         // Usamos LinkedHashMap para mantener el orden de la base de datos
         Map<String, Paciente> pacienteMap = new LinkedHashMap<>();
@@ -131,18 +110,17 @@ public class PacienteMapper {
                 p.setNombrePaciente(safeString(row, 1, "Sin Nombre"));
                 p.setSexo(safeString(row, 2, "N/A"));
                 p.setFechaAtencion(safeString(row, 3, "N/A"));
+                p.setFechaNacimiento(safeString(row, 4, "N/A"));
                 p.setExamenes(new ArrayList<>());
                 return p;
             });
 
             // 3. Validación de existencia de examen en la fila
-            // Si la columna 3 (nombre examen) es nula, esta fila no tiene examen
             if (row.length > 5 && row[5] != null) {
-                Examen examen = new Examen(
-                    row[3].toString(), 
-                    safeString(row, 6, LocalDate.now().toString()), // Fecha por defecto hoy
-                    safeString(row, 7, "URL_NO_DISPONIBLE")         // Ruta por defecto
-                );
+                Examen examen = new Examen();
+                examen.setNombre(row[5].toString());
+                examen.setFecha(safeString(row, 6, "N/A"));
+                examen.setArchivo(safeString(row, 7, "URL_NO_DISPONIBLE"));
                 paciente.getExamenes().add(examen);
             }
         }
@@ -160,24 +138,36 @@ public class PacienteMapper {
         List<Paciente> lista = new ArrayList<>();
         // Si vas a agregar exámenes
         List<Examen> examenes = new ArrayList<>();
-        examenes.add(new Examen("Hemograma", LocalDate.now().toString(), "\\172.20.14.18\\servicios\\MEDICINA OCUPACIONAL\\GENERAL_1432838.pdf"));
-        examenes.add(new Examen("Orina completo", LocalDate.now().toString(), "\\172.20.14.18\\servicios\\MEDICINA OCUPACIONAL\\GENERAL_1432838.pdf"));
-        examenes.add(new Examen("Radiografía tórax", LocalDate.now().toString(), "\\172.20.14.18\\servicios\\MEDICINA OCUPACIONAL\\GENERAL_1432838.pdf"));
+        Examen examen = new Examen();
+        examen.setNombre("Hemograma");
+        examen.setFecha(LocalDate.now().toString());
+        examen.setArchivo("GENERAL_1432838.pdf");
+        examenes.add(examen);
+        examen.setNombre("Orina completo");
+        examen.setFecha(LocalDate.now().toString());
+        examen.setArchivo("GENERAL_1432839.pdf");
+        examenes.add(examen);
+        examen.setNombre("Radiografía tórax");
+        examen.setFecha(LocalDate.now().toString());
+        examen.setArchivo("GENERAL_1432840.pdf");
+        examenes.add(examen);
+        Paciente paciente = new Paciente();
+        paciente.setId("PAC-001");
+        paciente.setNombrePaciente("Ana Martinez");
+        paciente.setSexo("F");
+        paciente.setFechaAtencion("2026-01-20");
+        paciente.setFechaNacimiento("1983-02-23");
+        paciente.setExamenes(examenes);
+        
+        lista.add(paciente);
+        paciente.setId("PAC-002");
+        paciente.setNombrePaciente("Luis Perez");
+        paciente.setSexo("M");
+        paciente.setFechaAtencion("2026-02-05");
+        paciente.setFechaNacimiento("1985-05-23");
+        paciente.setExamenes(examenes);
 
-        lista.add(new Paciente(
-                "PAC-001",
-                "Ana Martinez",
-                "F","2026-01-20","1983-02-23",
-                examenes
-        ));
-
-        //p1.setExamenes(examenes);
-        lista.add(new Paciente(
-                "PAC-002",
-                "Luis Perez",
-                "M","2026-02-05","1985-05-23",
-                examenes
-        ));
+        lista.add(paciente);
 
         return lista;
     }

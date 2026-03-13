@@ -20,6 +20,5 @@ public class PacienteEntity {
 	public List<ExamenEntity> getExamenes() {
 		return examenes;
 	}
-    
-    
+        
 }
