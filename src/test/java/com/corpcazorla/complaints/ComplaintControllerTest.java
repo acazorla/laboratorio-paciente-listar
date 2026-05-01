@@ -1,6 +1,6 @@
 package com.corpcazorla.complaints;
 
-import com.corpcazorla.complaints.application.service.RegisterComplaintService;
+import com.corpcazorla.complaints.application.service.RegisterComplaintServiceImpl;
 import com.corpcazorla.complaints.domain.model.DataPage;
 import com.corpcazorla.complaints.domain.model.Complaint;
 import io.quarkus.test.InjectMock;
@@ -16,10 +16,10 @@ import static org.mockito.Mockito.when;
 class ComplaintControllerTest {
 
 	@InjectMock
-    RegisterComplaintService service; // Mockeamos el servicio que inyectas por constructor
+    RegisterComplaintServiceImpl service; // Mockeamos el servicio que inyectas por constructor
 	
     @Test
-    void testListarPacientesSuccess() {
+    void testRegisterComplaintSuccess() {
         // 1. Crear datos de prueba basados en tu modelo 'Paciente.java'
         Complaint mockPaciente = new Complaint();
         mockPaciente.setComplaintId("30626C25-6F3E-F111-9F8D-005056A122AA"); 

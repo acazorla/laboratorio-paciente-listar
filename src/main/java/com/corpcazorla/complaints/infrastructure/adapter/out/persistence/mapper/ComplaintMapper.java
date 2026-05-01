@@ -4,8 +4,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import com.corpcazorla.complaints.domain.model.Complaint;
 import com.corpcazorla.complaints.infrastructure.adapter.in.dto.*;
-//import com.corpcazorla.complaints.infrastructure.adapter.out.persistence.entity.ComplaintEntity;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -26,33 +24,6 @@ public class ComplaintMapper {
 		dto.setTrackingCode(complaint.getTrackingCode());
 		return dto;
 	}
-
-	// ===============================
-	// JPA ENTITY -> DOMAIN
-	// ===============================
-	/*
-	 * public static Complaint fromEntity(ComplaintEntity entity) { Complaint
-	 * complaint = new Complaint();
-	 * complaint.setComplaintId(entity.getComplaintId());
-	 * complaint.setTrackingCode(entity.getTrackingCode());
-	 * 
-	 * return complaint; }
-	 * 
-	 * public static List<Complaint> fromEntityList(List<ComplaintEntity> entities)
-	 * { return entities.stream().map(ComplaintMapper::fromEntity).toList(); }
-	 */
-
-	// ===============================
-	// STORED PROCEDURE (Object[]) -> DOMAIN
-	// ===============================
-	/*
-	 * public static Complaint fromRow(Object[] row) { Complaint p = new
-	 * Complaint();
-	 * 
-	 * p.setComplaintId((String) row[0]); p.setTrackingCode((String) row[1]);
-	 * 
-	 * return p; }
-	 */
 
 	public List<Complaint> fromRows(List<Object[]> rows) {
 		if (rows == null || rows.isEmpty()) {
@@ -86,17 +57,6 @@ public class ComplaintMapper {
 	// Método auxiliar utilitario para obtener datos de la fila de forma segura
 	private String safeString(Object[] row, int index, String defaultValue) {
 		return (row.length > index && row[index] != null) ? row[index].toString() : defaultValue;
-	}
-	// ===============================
-	// MOCK DATA -> DOMAIN
-	// ===============================
-	public static List<Complaint> mockList() {
-		List<Complaint> lista = new ArrayList<>();
-		Complaint complaint = new Complaint();
-		complaint.setComplaintId("30626C25-6F3E-F111-9F8D-005056A122AA");
-		complaint.setTrackingCode("R-PE-2026-00001");
-		lista.add(complaint);
-		return lista;
 	}
 
 }
